@@ -9,7 +9,7 @@ import {
     export class AirApi implements ICredentialType {
 	name = 'AirApi';
 	displayName = 'Air API';
-    icon: Icon = 'file:Air_Logo.svg';
+    icon: Icon = 'file:../Air_Logo.svg';
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.air.inc/v1',

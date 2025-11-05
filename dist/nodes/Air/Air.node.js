@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Air = void 0;
 const create_1 = require("./resources/customField/create");
 const create_2 = require("./resources/tags/create");
+const AirApi_credentials_1 = require("./credentials/AirApi.credentials");
 class Air {
     constructor() {
         this.description = {
@@ -21,7 +22,7 @@ class Air {
             outputs: ['main'],
             credentials: [
                 {
-                    name: 'AirApi',
+                    name: AirApi_credentials_1.AirApi.name,
                     required: true,
                 },
             ],
@@ -74,7 +75,7 @@ class Air {
                         {
                             name: 'Get',
                             value: 'get',
-                            action: 'Get Air Assets',
+                            action: 'Get Air assets',
                             description: 'Get Air Assets',
                             routing: {
                                 request: {

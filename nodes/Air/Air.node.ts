@@ -1,6 +1,7 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { customFieldCreateDescription } from './resources/customField/create';
 import { tagsCreateDescription } from './resources/tags/create';
+import { AirApi } from './credentials/AirApi.credentials';
 
 export class Air implements INodeType {
 	description: INodeTypeDescription = {
@@ -20,7 +21,7 @@ export class Air implements INodeType {
         outputs: ['main'],
         credentials: [
             {
-                name: 'AirApi',
+                name: AirApi.name,
                 required: true,
             },
         ],
@@ -75,7 +76,7 @@ export class Air implements INodeType {
                     {
                         name: 'Get',
                         value: 'get',
-                        action: 'Get Air Assets',
+                        action: 'Get Air assets',
                         description: 'Get Air Assets',
                         routing: {
                             request: {
