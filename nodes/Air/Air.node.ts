@@ -1,6 +1,10 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { customFieldCreateDescription } from './resources/customField/create';
 import { tagsCreateDescription } from './resources/tags/create';
+import { boardsCreateDescription } from './resources/boards/create';
+import { boardsPatchDescription } from './resources/boards/patch';
+import { boardsAddAssetsDescription } from './resources/boards/assetsAdd';
+import { boardsUpdate } from './resources/boards/update';
 import { AirApi } from './credentials/AirApi.credentials';
 import { assetsUpdate } from './resources/assets/update';
 
@@ -89,7 +93,6 @@ export class Air implements INodeType {
                             },
                         },
                     },
-                    // TODO add PUT for applying custom field to asset
                     {
                         name: 'Apply Custom Field',
                         value: 'applyCustomField',
@@ -132,6 +135,42 @@ export class Air implements INodeType {
                 },
                 options: [
                     {
+                        name: 'Add Assets',
+                        value: 'addAssets',
+                        action: 'Add Assets to Board',
+                        description: 'Associate one or more assets with a board',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '={{`/boards/${String($parameter["boardId"] || "").trim()}/assets`}}',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Apply Custom Field',
+                        value: 'applyCustomField',
+                        action: 'Apply Custom Field to Board',
+                        description: 'Set or unset custom field value(s) on a board',
+                        routing: {
+                            request: {
+                                method: 'PUT',
+                                url: '={{`/boards/${String($parameter["boardId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
+                            },
+                        },
+                    },
+                    {   
+                        name: 'Create',
+                        value: 'create',
+                        action: 'Create Air Board',
+                        description: 'Create Air Board',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/boards',
+                            },
+                        },
+                    },
+                    {
                         name: 'Get',
                         value: 'get',
                         action: 'Get Air Boards',
@@ -143,16 +182,15 @@ export class Air implements INodeType {
                             },
                         },
                     },
-                    // TODO add POST for creating board
-                    {   
-                        name: 'Create',
-                        value: 'create',
-                        action: 'Create Air Board',
-                        description: 'Create Air Board',
+                    {
+                        name: 'Update',
+                        value: 'update',
+                        action: 'Update Air Board',
+                        description: 'Update a board’s title, description, or parent',
                         routing: {
                             request: {
-                                method: 'POST',
-                                url: '/boards',
+                                method: 'PATCH',
+                                url: '={{`/boards/${String($parameter["boardId"] || "").trim()}`}}',
                             },
                         },
                     },
@@ -241,6 +279,10 @@ export class Air implements INodeType {
             },
             ...customFieldCreateDescription,
             ...tagsCreateDescription,
+            ...boardsCreateDescription,
+            ...boardsPatchDescription,
+            ...boardsAddAssetsDescription,
+            ...boardsUpdate,
             ...assetsUpdate,
 		]
 	};

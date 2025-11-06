@@ -3,8 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Air = void 0;
 const create_1 = require("./resources/customField/create");
 const create_2 = require("./resources/tags/create");
+const create_3 = require("./resources/boards/create");
+const patch_1 = require("./resources/boards/patch");
+const assetsAdd_1 = require("./resources/boards/assetsAdd");
+const update_1 = require("./resources/boards/update");
 const AirApi_credentials_1 = require("./credentials/AirApi.credentials");
-const update_1 = require("./resources/assets/update");
+const update_2 = require("./resources/assets/update");
 class Air {
     constructor() {
         this.description = {
@@ -126,14 +130,26 @@ class Air {
                     },
                     options: [
                         {
-                            name: 'Get',
-                            value: 'get',
-                            action: 'Get Air Boards',
-                            description: 'Get Air Boards',
+                            name: 'Add Assets',
+                            value: 'addAssets',
+                            action: 'Add Assets to Board',
+                            description: 'Associate one or more assets with a board',
                             routing: {
                                 request: {
-                                    method: 'GET',
-                                    url: '/boards',
+                                    method: 'POST',
+                                    url: '={{`/boards/${String($parameter["boardId"] || "").trim()}/assets`}}',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Apply Custom Field',
+                            value: 'applyCustomField',
+                            action: 'Apply Custom Field to Board',
+                            description: 'Set or unset custom field value(s) on a board',
+                            routing: {
+                                request: {
+                                    method: 'PUT',
+                                    url: '={{`/boards/${String($parameter["boardId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
                                 },
                             },
                         },
@@ -146,6 +162,30 @@ class Air {
                                 request: {
                                     method: 'POST',
                                     url: '/boards',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Get',
+                            value: 'get',
+                            action: 'Get Air Boards',
+                            description: 'Get Air Boards',
+                            routing: {
+                                request: {
+                                    method: 'GET',
+                                    url: '/boards',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Update',
+                            value: 'update',
+                            action: 'Update Air Board',
+                            description: 'Update a board’s title, description, or parent',
+                            routing: {
+                                request: {
+                                    method: 'PATCH',
+                                    url: '={{`/boards/${String($parameter["boardId"] || "").trim()}`}}',
                                 },
                             },
                         },
@@ -234,7 +274,11 @@ class Air {
                 },
                 ...create_1.customFieldCreateDescription,
                 ...create_2.tagsCreateDescription,
-                ...update_1.assetsUpdate,
+                ...create_3.boardsCreateDescription,
+                ...patch_1.boardsPatchDescription,
+                ...assetsAdd_1.boardsAddAssetsDescription,
+                ...update_1.boardsUpdate,
+                ...update_2.assetsUpdate,
             ]
         };
     }
