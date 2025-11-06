@@ -94,6 +94,18 @@ export class Air implements INodeType {
                         },
                     },
                     {
+                        name: 'Update',
+                        value: 'update',
+                        action: 'Update Air Asset',
+                        description: 'Update an asset’s details',
+                        routing: {
+                            request: {
+                                method: 'PATCH',
+                                url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionIdUpdate"] || "").trim()}`}}',
+                            },
+                        },
+                    },
+                    {
                         name: 'Apply Custom Field',
                         value: 'applyCustomField',
                         action: 'Apply Custom Field to Asset',

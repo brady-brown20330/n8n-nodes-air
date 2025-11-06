@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 const showOnlyForAssetsUpdate = {
 	resource: ['assets'],
-	operation: ['applyCustomField', 'applyTag'],
+	operation: ['applyCustomField', 'applyTag', 'update'],
 };
 
 
@@ -18,6 +18,20 @@ export const assetsUpdate: INodeProperties[] = [
 		},
 		description: 'The ID of the asset to update',
 		// Path parameter used in URL; no need to send separately
+	},
+    {
+		displayName: 'Version ID',
+		name: 'versionIdUpdate',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['update'],
+			},
+		},
+		description: 'The version ID of the asset to update',
 	},
     {
         displayName: 'Custom Field ID',
@@ -54,6 +68,47 @@ export const assetsUpdate: INodeProperties[] = [
             },
         },
     },
+	// Asset update fields
+	{
+		displayName: 'Title',
+		name: 'title',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['update'],
+			},
+		},
+		description: 'Asset title',
+		routing: {
+			send: {
+				type: 'body',
+				property: 'title',
+				value: '={{$value !== "" ? $value : undefined}}',
+			},
+		},
+	},
+	{
+		displayName: 'Description',
+		name: 'description',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['update'],
+			},
+		},
+		description: 'Asset description',
+		routing: {
+			send: {
+				type: 'body',
+				property: 'description',
+				value: '={{$value !== "" ? $value : undefined}}',
+			},
+		},
+	},
 	{
 		displayName: 'Value IDs (Comma-Separated)',
 		name: 'valueIds',
