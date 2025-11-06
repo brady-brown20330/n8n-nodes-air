@@ -1,5 +1,11 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnlyForAssetsUpdate = {
+	resource: ['assets'],
+	operation: ['applyCustomField', 'applyTag'],
+};
+
+
 export const assetsUpdate: INodeProperties[] = [
 	{
 		displayName: 'Asset ID',
@@ -8,10 +14,7 @@ export const assetsUpdate: INodeProperties[] = [
 		default: '',    
 		required: true,
 		displayOptions: {
-            show: {
-                resource: ['assets'],
-                operation: ['applyCustomField'],
-            },
+            show: showOnlyForAssetsUpdate,
 		},
 		description: 'The ID of the asset to update',
 		// Path parameter used in URL; no need to send separately
@@ -71,4 +74,39 @@ export const assetsUpdate: INodeProperties[] = [
 			},
 		},
 	},
+	{
+		displayName: 'Version ID',
+		name: 'versionId',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['applyTag'],
+			},
+		},
+		description: 'The version ID of the asset to tag',
+	},
+	{
+		displayName: 'Tag ID',
+		name: 'tagId',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['applyTag'],
+			},
+		},
+		description: 'Tag ID to add to the asset version',
+		routing: {
+			send: {
+				type: 'body',
+				property: 'id',
+				value: '={{$parameter["tagId"]}}',
+			},
+		},
+	},
+
 ];

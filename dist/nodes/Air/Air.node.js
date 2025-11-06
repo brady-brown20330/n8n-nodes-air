@@ -86,7 +86,7 @@ class Air {
                             },
                         },
                         {
-                            name: 'Apply Custom Field (DEV)',
+                            name: 'Apply Custom Field',
                             value: 'applyCustomField',
                             action: 'Apply Custom Field to Asset',
                             description: 'Apply a custom field to an asset',
@@ -94,6 +94,18 @@ class Air {
                                 request: {
                                     method: 'PUT',
                                     url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Apply Tag',
+                            value: 'applyTag',
+                            action: 'Apply Tag to Asset',
+                            description: 'Apply a tag to an asset',
+                            routing: {
+                                request: {
+                                    method: 'POST',
+                                    url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionId"] || "").trim()}/tags`}}',
                                 },
                             },
                         },

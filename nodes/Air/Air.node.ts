@@ -91,7 +91,7 @@ export class Air implements INodeType {
                     },
                     // TODO add PUT for applying custom field to asset
                     {
-                        name: 'Apply Custom Field (DEV)',
+                        name: 'Apply Custom Field',
                         value: 'applyCustomField',
                         action: 'Apply Custom Field to Asset',
                         description: 'Apply a custom field to an asset',
@@ -102,7 +102,18 @@ export class Air implements INodeType {
 								},
 							},
 						},
-                    // TODO add POST for applying tag to asset
+                        {
+                            name: 'Apply Tag',
+                            value: 'applyTag',
+                            action: 'Apply Tag to Asset',
+                            description: 'Apply a tag to an asset',
+                                routing: {
+                                    request: {
+                                        method: 'POST',
+                                        url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionId"] || "").trim()}/tags`}}',
+                                    },
+                                },
+                            },  
                     // TODO add POST for creating asset
                 ],
                 default: 'get',
