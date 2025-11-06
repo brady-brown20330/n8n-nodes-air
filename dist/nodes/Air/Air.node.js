@@ -4,12 +4,13 @@ exports.Air = void 0;
 const create_1 = require("./resources/customField/create");
 const create_2 = require("./resources/tags/create");
 const AirApi_credentials_1 = require("./credentials/AirApi.credentials");
+const update_1 = require("./resources/assets/update");
 class Air {
     constructor() {
         this.description = {
             displayName: 'Air',
             name: 'air',
-            icon: 'file:Air_Logo.svg',
+            icon: 'file:./Air_Logo.svg',
             group: ['transform'],
             version: 1,
             subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -83,7 +84,19 @@ class Air {
                                     url: '/assets',
                                 },
                             },
-                        }
+                        },
+                        {
+                            name: 'Apply Custom Field (DEV)',
+                            value: 'applyCustomField',
+                            action: 'Apply Custom Field to Asset',
+                            description: 'Apply a custom field to an asset',
+                            routing: {
+                                request: {
+                                    method: 'PUT',
+                                    url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
+                                },
+                            },
+                        },
                     ],
                     default: 'get',
                 },
@@ -108,6 +121,18 @@ class Air {
                             routing: {
                                 request: {
                                     method: 'GET',
+                                    url: '/boards',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Create',
+                            value: 'create',
+                            action: 'Create Air Board',
+                            description: 'Create Air Board',
+                            routing: {
+                                request: {
+                                    method: 'POST',
                                     url: '/boards',
                                 },
                             },
@@ -197,6 +222,7 @@ class Air {
                 },
                 ...create_1.customFieldCreateDescription,
                 ...create_2.tagsCreateDescription,
+                ...update_1.assetsUpdate,
             ]
         };
     }

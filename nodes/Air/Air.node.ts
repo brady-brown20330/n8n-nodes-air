@@ -2,13 +2,17 @@ import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { customFieldCreateDescription } from './resources/customField/create';
 import { tagsCreateDescription } from './resources/tags/create';
 import { AirApi } from './credentials/AirApi.credentials';
+import { assetsUpdate } from './resources/assets/update';
+
+
+/* eslint-disable  n8n-nodes-base/node-param-operation-option-action-miscased */
+/* eslint-disable  n8n-nodes-base/node-param-resource-with-plural-option */
 
 export class Air implements INodeType {
 	description: INodeTypeDescription = {
-		// Basic node details will go here
         displayName: 'Air',
         name: 'air',
-        icon: 'file:Air_Logo.svg',
+        icon: 'file:./Air_Logo.svg',
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -33,7 +37,7 @@ export class Air implements INodeType {
             },
         },
 		properties: [
-		// Resources and operations will go here
+            // Resources
             {
                 displayName: 'Resource',
                 name: 'resource',
@@ -59,7 +63,7 @@ export class Air implements INodeType {
                 ],
                 default: 'assets',
             },
-            // Operations will go here
+            // Operations
             {
                 displayName: 'Operation',
                 name: 'operation',
@@ -84,7 +88,21 @@ export class Air implements INodeType {
                                 url: '/assets',
                             },
                         },
-                    }
+                    },
+                    // TODO add PUT for applying custom field to asset
+                    {
+                        name: 'Apply Custom Field (DEV)',
+                        value: 'applyCustomField',
+                        action: 'Apply Custom Field to Asset',
+                        description: 'Apply a custom field to an asset',
+							routing: {
+								request: {
+									method: 'PUT',
+									url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
+								},
+							},
+						},
+                    // TODO add POST for applying tag to asset
                     // TODO add POST for creating asset
                 ],
                 default: 'get',
@@ -115,6 +133,18 @@ export class Air implements INodeType {
                         },
                     },
                     // TODO add POST for creating board
+                    {   
+                        name: 'Create',
+                        value: 'create',
+                        action: 'Create Air Board',
+                        description: 'Create Air Board',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/boards',
+                            },
+                        },
+                    },
                 ],
                 default: 'get',
             },
@@ -200,6 +230,7 @@ export class Air implements INodeType {
             },
             ...customFieldCreateDescription,
             ...tagsCreateDescription,
+            ...assetsUpdate,
 		]
 	};
 }

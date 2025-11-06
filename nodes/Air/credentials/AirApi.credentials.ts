@@ -1,9 +1,11 @@
 import {
-	IAuthenticateGeneric,
-	Icon,
-	ICredentialTestRequest,
-	ICredentialType,
-	INodeProperties,
+    IAuthenticateGeneric,
+    Icon,
+    ICredentialTestRequest,
+    ICredentialType,
+    INodeProperties,
+    IHttpRequestOptions,
+    LoggerProxy as Logger,
 } from 'n8n-workflow';
 
     export class AirApi implements ICredentialType {
@@ -34,13 +36,31 @@ import {
 			default: '',
 		}
 	];
-	authenticate = {
-		type: 'generic',
-		properties: {
-			headers: {
+    authenticate = {
+        type: 'generic',
+        properties: {
+            headers: {
                 'x-api-key': '={{$credentials.apiKey}}',
-				'x-air-workspace-id': '={{$credentials.workspaceId}}'
-			}
-		},
-	} as IAuthenticateGeneric;
+                'x-air-workspace-id': '={{$credentials.workspaceId}}'
+            },
+        },
+        preSend: [
+            async function (requestOptions: IHttpRequestOptions) {
+                try {
+                    const bodyPreview = requestOptions?.body ? JSON.stringify(requestOptions.body) : undefined;
+                    const headers = { ...(requestOptions?.headers || {}) } as Record<string, unknown>;
+                    if (headers['x-api-key']) headers['x-api-key'] = '[redacted]';
+                    Logger.info('[Air] Outgoing request', {
+                        method: requestOptions?.method,
+                        url: requestOptions?.url,
+                        headers,
+                        body: bodyPreview,
+                    });
+                } catch {
+                    Logger.info('[Air] Outgoing request log failed!');
+                }
+                return requestOptions;
+            },
+        ],
+    } as IAuthenticateGeneric;
 }

@@ -28,7 +28,6 @@ export const customFieldCreateDescription: INodeProperties[] = [
         name: 'description',
         type: 'string',
         default: '',
-        required: true,
         displayOptions: {
             show: showOnlyForCustomFieldCreate,
         },
@@ -59,7 +58,7 @@ export const customFieldCreateDescription: INodeProperties[] = [
                 value: 'date',
             },
             {
-                name: 'Plain text',
+                name: 'Plain Text',
                 value: 'plain-text',
             }
 		],

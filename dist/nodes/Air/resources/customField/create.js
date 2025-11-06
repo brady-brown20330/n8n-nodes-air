@@ -28,7 +28,6 @@ exports.customFieldCreateDescription = [
         name: 'description',
         type: 'string',
         default: '',
-        required: true,
         displayOptions: {
             show: showOnlyForCustomFieldCreate,
         },
@@ -58,7 +57,7 @@ exports.customFieldCreateDescription = [
                 value: 'date',
             },
             {
-                name: 'Plain text',
+                name: 'Plain Text',
                 value: 'plain-text',
             }
         ],
