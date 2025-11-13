@@ -8,7 +8,6 @@ import { boardsUpdate } from './resources/boards/update';
 import { uploadsInitiateDescription } from './resources/uploads/initiate';
 import { uploadsCompleteDescription } from './resources/uploads/complete';
 import { uploadsUploadPartDescription } from './resources/uploads/uploadPart';
-import { AirApi } from './credentials/AirApi.credentials';
 import { assetsUpdate } from './resources/assets/update';
 
 
@@ -32,7 +31,7 @@ export class Air implements INodeType {
         outputs: ['main'],
         credentials: [
             {
-                name: AirApi.name,
+                name: 'airApi',
                 required: true,
             },
         ],

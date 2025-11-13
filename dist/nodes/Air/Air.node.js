@@ -10,7 +10,6 @@ const update_1 = require("./resources/boards/update");
 const initiate_1 = require("./resources/uploads/initiate");
 const complete_1 = require("./resources/uploads/complete");
 const uploadPart_1 = require("./resources/uploads/uploadPart");
-const AirApi_credentials_1 = require("./credentials/AirApi.credentials");
 const update_2 = require("./resources/assets/update");
 class Air {
     constructor() {
@@ -30,7 +29,7 @@ class Air {
             outputs: ['main'],
             credentials: [
                 {
-                    name: AirApi_credentials_1.AirApi.name,
+                    name: 'airApi',
                     required: true,
                 },
             ],
