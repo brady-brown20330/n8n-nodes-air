@@ -1,14 +1,19 @@
 {
     "name": "n8n-nodes-air",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Air node for n8n",
     "license": "MIT",
     "homepage": "https://air.inc",
-    "keywords": ["n8n-community-node-package"],
-    "author": { "name": "Brady Brown", "email": "brady@air.inc" },
+    "keywords": [
+        "n8n-community-node-package"
+    ],
+    "author": {
+        "name": "Brady Brown",
+        "email": "brady@air.inc"
+    },
     "repository": {
         "type": "git",
-        "url": "https://github.com/air-inc/n8n-nodes-air.git"
+        "url": "https://github.com/brady-brown20330/n8n-nodes-air"
     },
     "scripts": {
         "build": "n8n-node build",
@@ -19,12 +24,18 @@
         "release": "n8n-node release",
         "prepublishOnly": "n8n-node prerelease"
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "n8n": {
         "n8nNodesApiVersion": 1,
         "strict": true,
-        "credentials": ["dist/credentials/AirApi.credentials.js"],
-        "nodes": ["dist/nodes/Air/Air.node.js"]
+        "credentials": [
+            "dist/credentials/AirApi.credentials.js"
+        ],
+        "nodes": [
+            "dist/nodes/Air/Air.node.js"
+        ]
     },
     "devDependencies": {
         "@n8n/node-cli": "*",
@@ -33,5 +44,7 @@
         "release-it": "^19.0.4",
         "typescript": "5.9.2"
     },
-    "peerDependencies": { "n8n-workflow": "*" }
+    "peerDependencies": {
+        "n8n-workflow": "*"
+    }
 }
