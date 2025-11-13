@@ -5,6 +5,9 @@ import { boardsCreateDescription } from './resources/boards/create';
 import { boardsPatchDescription } from './resources/boards/patch';
 import { boardsAddAssetsDescription } from './resources/boards/assetsAdd';
 import { boardsUpdate } from './resources/boards/update';
+import { uploadsInitiateDescription } from './resources/uploads/initiate';
+import { uploadsCompleteDescription } from './resources/uploads/complete';
+import { uploadsUploadPartDescription } from './resources/uploads/uploadPart';
 import { AirApi } from './credentials/AirApi.credentials';
 import { assetsUpdate } from './resources/assets/update';
 
@@ -63,6 +66,10 @@ export class Air implements INodeType {
                     {
                         name: "Tags",
                         value: 'tags',
+                    },
+                    {
+                        name: 'Uploads',
+                        value: 'uploads',
                     }
                 ],
                 default: 'assets',
@@ -82,54 +89,53 @@ export class Air implements INodeType {
                 },
                 options: [
                     {
-                        name: 'Get',
-                        value: 'get',
-                        action: 'Get Air assets',
-                        description: 'Get Air Assets',
-                        routing: {
-                            request: {
-                                method: 'GET',
-                                url: '/assets',
-                            },
-                        },
-                    },
-                    {
-                        name: 'Update',
-                        value: 'update',
-                        action: 'Update Air Asset',
-                        description: 'Update an asset’s details',
-                        routing: {
-                            request: {
-                                method: 'PATCH',
-                                url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionIdUpdate"] || "").trim()}`}}',
-                            },
-                        },
-                    },
-                    {
                         name: 'Apply Custom Field',
                         value: 'applyCustomField',
                         action: 'Apply Custom Field to Asset',
                         description: 'Apply a custom field to an asset',
-							routing: {
-								request: {
-									method: 'PUT',
-									url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
-								},
+                        routing: {
+                            request: {
+                                method: 'PUT',
+                                url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/customfields/${String($parameter["customFieldId"] || "").trim()}`}}',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Apply Tag',
+                        value: 'applyTag',
+                        action: 'Apply Tag to Asset',
+                        description: 'Apply a tag to an asset',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionId"] || "").trim()}/tags`}}',
+                            },
+                        },
+                    },
+					{
+						name: 'Get',
+						value: 'get',
+						action: 'Get Air assets',
+						description: 'Get Air Assets',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/assets',
 							},
 						},
-                        {
-                            name: 'Apply Tag',
-                            value: 'applyTag',
-                            action: 'Apply Tag to Asset',
-                            description: 'Apply a tag to an asset',
-                                routing: {
-                                    request: {
-                                        method: 'POST',
-                                        url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionId"] || "").trim()}/tags`}}',
-                                    },
-                                },
-                            },  
-                    // TODO add POST for creating asset
+					},
+					{
+						name: 'Update',
+						value: 'update',
+						action: 'Update Air Asset',
+						description: 'Update an asset’s details',
+						routing: {
+							request: {
+								method: 'PATCH',
+								url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionIdUpdate"] || "").trim()}`}}',
+							},
+						},
+					},
                 ],
                 default: 'get',
             }, 
@@ -217,37 +223,49 @@ export class Air implements INodeType {
                 displayOptions: {
                     show: {
                         resource: [
-                            'customFields',
+                            'uploads',
                         ],
                     },
                 },
                 options: [
                     {
-                        name: 'Get',
-                        value: 'get',
-                        action: 'Get Air Custom Fields',
-                        description: 'Get Air Custom Fields',
+                        name: 'Complete Upload',
+                        value: 'completeUpload',
+                        action: 'Complete Upload',
+                        description: 'Finalize multipart upload with part ETags',
                         routing: {
                             request: {
-                                method: 'GET',
-                                url: '/customFields',
+                                method: 'POST',
+                                url: '/uploads/completeMultipart',
                             },
                         },
                     },
                     {
-                        name: 'Create',
-                        value: 'create',
-                        action: 'Create Air Custom Field',
-                        description: 'Create Air Custom Field',
+                        name: 'Initiate Upload',
+                        value: 'initiateUpload',
+                        action: 'Initiate Upload',
+                        description: 'Initiate multipart upload and get signed part URLs',
                         routing: {
                             request: {
                                 method: 'POST',
-                                url: '/customFields',
+                                url: '/uploads',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Upload Part',
+                        value: 'uploadPart',
+                        action: 'Get Signed URL for Upload Part',
+                        description: 'Request a signed URL to upload a specific part',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/uploads/uploadPart',
                             },
                         },
                     },
                 ],
-                default: 'get',
+                default: 'initiateUpload',
             },
             {
                 displayName: 'Operation',
@@ -295,6 +313,9 @@ export class Air implements INodeType {
             ...boardsPatchDescription,
             ...boardsAddAssetsDescription,
             ...boardsUpdate,
+            ...uploadsInitiateDescription,
+            ...uploadsUploadPartDescription,
+            ...uploadsCompleteDescription,
             ...assetsUpdate,
 		]
 	};

@@ -7,6 +7,9 @@ const create_3 = require("./resources/boards/create");
 const patch_1 = require("./resources/boards/patch");
 const assetsAdd_1 = require("./resources/boards/assetsAdd");
 const update_1 = require("./resources/boards/update");
+const initiate_1 = require("./resources/uploads/initiate");
+const complete_1 = require("./resources/uploads/complete");
+const uploadPart_1 = require("./resources/uploads/uploadPart");
 const AirApi_credentials_1 = require("./credentials/AirApi.credentials");
 const update_2 = require("./resources/assets/update");
 class Air {
@@ -60,6 +63,10 @@ class Air {
                         {
                             name: "Tags",
                             value: 'tags',
+                        },
+                        {
+                            name: 'Uploads',
+                            value: 'uploads',
                         }
                     ],
                     default: 'assets',
@@ -77,30 +84,6 @@ class Air {
                         },
                     },
                     options: [
-                        {
-                            name: 'Get',
-                            value: 'get',
-                            action: 'Get Air assets',
-                            description: 'Get Air Assets',
-                            routing: {
-                                request: {
-                                    method: 'GET',
-                                    url: '/assets',
-                                },
-                            },
-                        },
-                        {
-                            name: 'Update',
-                            value: 'update',
-                            action: 'Update Air Asset',
-                            description: 'Update an asset’s details',
-                            routing: {
-                                request: {
-                                    method: 'PATCH',
-                                    url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionIdUpdate"] || "").trim()}`}}',
-                                },
-                            },
-                        },
                         {
                             name: 'Apply Custom Field',
                             value: 'applyCustomField',
@@ -122,6 +105,30 @@ class Air {
                                 request: {
                                     method: 'POST',
                                     url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionId"] || "").trim()}/tags`}}',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Get',
+                            value: 'get',
+                            action: 'Get Air assets',
+                            description: 'Get Air Assets',
+                            routing: {
+                                request: {
+                                    method: 'GET',
+                                    url: '/assets',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Update',
+                            value: 'update',
+                            action: 'Update Air Asset',
+                            description: 'Update an asset’s details',
+                            routing: {
+                                request: {
+                                    method: 'PATCH',
+                                    url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/versions/${String($parameter["versionIdUpdate"] || "").trim()}`}}',
                                 },
                             },
                         },
@@ -212,37 +219,49 @@ class Air {
                     displayOptions: {
                         show: {
                             resource: [
-                                'customFields',
+                                'uploads',
                             ],
                         },
                     },
                     options: [
                         {
-                            name: 'Get',
-                            value: 'get',
-                            action: 'Get Air Custom Fields',
-                            description: 'Get Air Custom Fields',
+                            name: 'Complete Upload',
+                            value: 'completeUpload',
+                            action: 'Complete Upload',
+                            description: 'Finalize multipart upload with part ETags',
                             routing: {
                                 request: {
-                                    method: 'GET',
-                                    url: '/customFields',
+                                    method: 'POST',
+                                    url: '/uploads/completeMultipart',
                                 },
                             },
                         },
                         {
-                            name: 'Create',
-                            value: 'create',
-                            action: 'Create Air Custom Field',
-                            description: 'Create Air Custom Field',
+                            name: 'Initiate Upload',
+                            value: 'initiateUpload',
+                            action: 'Initiate Upload',
+                            description: 'Initiate multipart upload and get signed part URLs',
                             routing: {
                                 request: {
                                     method: 'POST',
-                                    url: '/customFields',
+                                    url: '/uploads',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Upload Part',
+                            value: 'uploadPart',
+                            action: 'Get Signed URL for Upload Part',
+                            description: 'Request a signed URL to upload a specific part',
+                            routing: {
+                                request: {
+                                    method: 'POST',
+                                    url: '/uploads/uploadPart',
                                 },
                             },
                         },
                     ],
-                    default: 'get',
+                    default: 'initiateUpload',
                 },
                 {
                     displayName: 'Operation',
@@ -290,6 +309,9 @@ class Air {
                 ...patch_1.boardsPatchDescription,
                 ...assetsAdd_1.boardsAddAssetsDescription,
                 ...update_1.boardsUpdate,
+                ...initiate_1.uploadsInitiateDescription,
+                ...uploadPart_1.uploadsUploadPartDescription,
+                ...complete_1.uploadsCompleteDescription,
                 ...update_2.assetsUpdate,
             ]
         };
