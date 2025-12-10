@@ -1,6 +1,5 @@
 {
   "name": "n8n-nodes-air",
-  "type": "module",
   "version": "1.2.1",
   "description": "Air node for n8n",
   "license": "MIT",
