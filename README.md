@@ -23,7 +23,7 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 ## Operations
 
 
-This node gives n8n workflows access to a subset of the [Air API](https://developer.air.inc/). Typical automations include:​:contentReference[oaicite:1]{index=1}  
+This node gives n8n workflows access to a subset of the [Air API](https://developer.air.inc/). Typical automations include:​:contentReference
 
 - **Assets**
   - Upload new assets to Air from any n8n source (S3, GDrive, FTP, webhooks, etc.)
@@ -38,21 +38,21 @@ This node gives n8n workflows access to a subset of the [Air API](https://develo
   - Add / remove assets on boards
   - Drive board organization from other systems (e.g. CRM, project tools)
 
-  - **Custom Fields**
-   - List Custom Fields
-   - Create Custom Field
-   - Update Custom Field (name/description)
-   - Add New Values
-   - Delete Values
+- **Custom Fields**
+  - List Custom Fields
+  - Create Custom Field
+  - Update Custom Field (name/description)
+  - Add New Values
+  - Delete Values
 
-  - **Tags**
-   - List Tags
-   - Create Tags
+- **Tags**
+  - List Tags
+  - Create Tags
 
-  - **Uploads**
-   - Create Upload URL
-   - Complete Upload Part (files > 5 GB)
-   - Complete Uplaod (files > 5 GB)
+- **Uploads**
+  - Create Upload URL
+  - Complete Upload Part (files > 5 GB)
+  - Complete Uplaod (files > 5 GB)
 
 > ⚠️ The exact list of operations may evolve. Always check the node’s **Resource** and **Operation** dropdowns in the n8n UI for the current surface area.
 
@@ -90,8 +90,8 @@ Sync boards with data from project tools.
 
 ## Resources
 
-* [Air Application](app.air.inc)
-* [Air Developer Documentation](developer.air.inc)
+* [Air Application](https://app.air.inc)
+* [Air Developer Documentation](https://developer.air.inc)
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
 
 
