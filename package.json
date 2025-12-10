@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/brady-brown20330/n8n-nodes-air"
+    "url": "git+https://github.com/brady-brown20330/n8n-nodes-air.git"
   },
   "scripts": {
     "build": "n8n-node build",
