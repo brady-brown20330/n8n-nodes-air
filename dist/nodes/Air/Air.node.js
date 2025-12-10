@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Air = void 0;
-const create_1 = require("./resources/customField/create");
-const create_2 = require("./resources/tags/create");
-const create_3 = require("./resources/boards/create");
+const customField_1 = require("./resources/customField");
+const create_1 = require("./resources/tags/create");
+const create_2 = require("./resources/boards/create");
 const patch_1 = require("./resources/boards/patch");
 const assetsAdd_1 = require("./resources/boards/assetsAdd");
 const update_1 = require("./resources/boards/update");
@@ -142,6 +142,58 @@ class Air {
                     displayOptions: {
                         show: {
                             resource: [
+                                'uploads',
+                            ],
+                        },
+                    },
+                    options: [
+                        {
+                            name: 'Complete Upload',
+                            value: 'completeUpload',
+                            action: 'Complete Upload',
+                            description: 'Finalize multipart upload with part ETags',
+                            routing: {
+                                request: {
+                                    method: 'POST',
+                                    url: '/uploads/completeMultipart',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Initiate Upload',
+                            value: 'initiateUpload',
+                            action: 'Initiate Upload',
+                            description: 'Initiate multipart upload and get signed part URLs',
+                            routing: {
+                                request: {
+                                    method: 'POST',
+                                    url: '/uploads',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Upload Part',
+                            value: 'uploadPart',
+                            action: 'Get Signed URL for Upload Part',
+                            description: 'Request a signed URL to upload a specific part',
+                            routing: {
+                                request: {
+                                    method: 'POST',
+                                    url: '/uploads/uploadPart',
+                                },
+                            },
+                        },
+                    ],
+                    default: 'initiateUpload',
+                },
+                {
+                    displayName: 'Operation',
+                    name: 'operation',
+                    type: 'options',
+                    noDataExpression: true,
+                    displayOptions: {
+                        show: {
+                            resource: [
                                 'boards',
                             ],
                         },
@@ -218,49 +270,73 @@ class Air {
                     displayOptions: {
                         show: {
                             resource: [
-                                'uploads',
+                                'customFields',
                             ],
                         },
                     },
                     options: [
                         {
-                            name: 'Complete Upload',
-                            value: 'completeUpload',
-                            action: 'Complete Upload',
-                            description: 'Finalize multipart upload with part ETags',
+                            name: 'Add Value',
+                            value: 'addValue',
+                            action: 'Add Custom Field Value',
+                            description: 'Add a new selectable value to a custom field',
                             routing: {
                                 request: {
                                     method: 'POST',
-                                    url: '/uploads/completeMultipart',
+                                    url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}/values`}}',
                                 },
                             },
                         },
                         {
-                            name: 'Initiate Upload',
-                            value: 'initiateUpload',
-                            action: 'Initiate Upload',
-                            description: 'Initiate multipart upload and get signed part URLs',
+                            name: 'Create',
+                            value: 'create',
+                            action: 'Create Air Custom Field',
+                            description: 'Create Air Custom Field',
                             routing: {
                                 request: {
                                     method: 'POST',
-                                    url: '/uploads',
+                                    url: '/customFields',
                                 },
                             },
                         },
                         {
-                            name: 'Upload Part',
-                            value: 'uploadPart',
-                            action: 'Get Signed URL for Upload Part',
-                            description: 'Request a signed URL to upload a specific part',
+                            name: 'Delete Value',
+                            value: 'deleteValue',
+                            action: 'Delete Custom Field Value',
+                            description: 'Delete a selectable value from a custom field',
                             routing: {
                                 request: {
-                                    method: 'POST',
-                                    url: '/uploads/uploadPart',
+                                    method: 'DELETE',
+                                    url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}/values/${String($parameter["valueId"] || "").trim()}`}}',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Get',
+                            value: 'get',
+                            action: 'Get Air Custom Fields',
+                            description: 'Get Air Custom Fields',
+                            routing: {
+                                request: {
+                                    method: 'GET',
+                                    url: '/customFields',
+                                },
+                            },
+                        },
+                        {
+                            name: 'Update',
+                            value: 'update',
+                            action: 'Update Air Custom Field',
+                            description: 'Update an existing Air custom field',
+                            routing: {
+                                request: {
+                                    method: 'PATCH',
+                                    url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}`}}',
                                 },
                             },
                         },
                     ],
-                    default: 'initiateUpload',
+                    default: 'get',
                 },
                 {
                     displayName: 'Operation',
@@ -302,9 +378,12 @@ class Air {
                     ],
                     default: 'get',
                 },
-                ...create_1.customFieldCreateDescription,
-                ...create_2.tagsCreateDescription,
-                ...create_3.boardsCreateDescription,
+                ...customField_1.customFieldCreateDescription,
+                ...customField_1.customFieldUpdateDescription,
+                ...customField_1.customFieldValueCreateDescription,
+                ...customField_1.customFieldValueDeleteDescription,
+                ...create_1.tagsCreateDescription,
+                ...create_2.boardsCreateDescription,
                 ...patch_1.boardsPatchDescription,
                 ...assetsAdd_1.boardsAddAssetsDescription,
                 ...update_1.boardsUpdate,

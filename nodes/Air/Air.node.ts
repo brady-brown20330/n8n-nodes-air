@@ -1,5 +1,5 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
-import { customFieldCreateDescription } from './resources/customField/create';
+import { customFieldCreateDescription, customFieldUpdateDescription, customFieldValueCreateDescription, customFieldValueDeleteDescription } from './resources/customField';
 import { tagsCreateDescription } from './resources/tags/create';
 import { boardsCreateDescription } from './resources/boards/create';
 import { boardsPatchDescription } from './resources/boards/patch';
@@ -146,6 +146,58 @@ export class Air implements INodeType {
                 displayOptions: {
                     show: {
                         resource: [
+                            'uploads',
+                        ],
+                    },
+                },
+                options: [
+                    {
+                        name: 'Complete Upload',
+                        value: 'completeUpload',
+                        action: 'Complete Upload',
+                        description: 'Finalize multipart upload with part ETags',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/uploads/completeMultipart',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Initiate Upload',
+                        value: 'initiateUpload',
+                        action: 'Initiate Upload',
+                        description: 'Initiate multipart upload and get signed part URLs',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/uploads',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Upload Part',
+                        value: 'uploadPart',
+                        action: 'Get Signed URL for Upload Part',
+                        description: 'Request a signed URL to upload a specific part',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/uploads/uploadPart',
+                            },
+                        },
+                    },
+                ],
+                default: 'initiateUpload',
+            },
+            {
+                displayName: 'Operation',
+                name: 'operation',
+                type: 'options',
+                noDataExpression: true,
+                displayOptions: {
+                    show: {
+                        resource: [
                             'boards',
                         ],
                     },
@@ -222,49 +274,73 @@ export class Air implements INodeType {
                 displayOptions: {
                     show: {
                         resource: [
-                            'uploads',
+                            'customFields',
                         ],
                     },
                 },
                 options: [
                     {
-                        name: 'Complete Upload',
-                        value: 'completeUpload',
-                        action: 'Complete Upload',
-                        description: 'Finalize multipart upload with part ETags',
+                        name: 'Add Value',
+                        value: 'addValue',
+                        action: 'Add Custom Field Value',
+                        description: 'Add a new selectable value to a custom field',
                         routing: {
                             request: {
                                 method: 'POST',
-                                url: '/uploads/completeMultipart',
+                                url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}/values`}}',
                             },
                         },
                     },
                     {
-                        name: 'Initiate Upload',
-                        value: 'initiateUpload',
-                        action: 'Initiate Upload',
-                        description: 'Initiate multipart upload and get signed part URLs',
+                        name: 'Create',
+                        value: 'create',
+                        action: 'Create Air Custom Field',
+                        description: 'Create Air Custom Field',
                         routing: {
                             request: {
                                 method: 'POST',
-                                url: '/uploads',
+                                url: '/customFields',
                             },
                         },
                     },
                     {
-                        name: 'Upload Part',
-                        value: 'uploadPart',
-                        action: 'Get Signed URL for Upload Part',
-                        description: 'Request a signed URL to upload a specific part',
+                        name: 'Delete Value',
+                        value: 'deleteValue',
+                        action: 'Delete Custom Field Value',
+                        description: 'Delete a selectable value from a custom field',
                         routing: {
                             request: {
-                                method: 'POST',
-                                url: '/uploads/uploadPart',
+                                method: 'DELETE',
+                                url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}/values/${String($parameter["valueId"] || "").trim()}`}}',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Get',
+                        value: 'get',
+                        action: 'Get Air Custom Fields',
+                        description: 'Get Air Custom Fields',
+                        routing: {
+                            request: {
+                                method: 'GET',
+                                url: '/customFields',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Update',
+                        value: 'update',
+                        action: 'Update Air Custom Field',
+                        description: 'Update an existing Air custom field',
+                        routing: {
+                            request: {
+                                method: 'PATCH',
+                                url: '={{`/customFields/${String($parameter["customFieldId"] || "").trim()}`}}',
                             },
                         },
                     },
                 ],
-                default: 'initiateUpload',
+                default: 'get',
             },
             {
                 displayName: 'Operation',
@@ -307,6 +383,9 @@ export class Air implements INodeType {
                 default: 'get',
             },
             ...customFieldCreateDescription,
+            ...customFieldUpdateDescription,
+            ...customFieldValueCreateDescription,
+            ...customFieldValueDeleteDescription,
             ...tagsCreateDescription,
             ...boardsCreateDescription,
             ...boardsPatchDescription,
