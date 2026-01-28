@@ -9,7 +9,8 @@ import { uploadsInitiateDescription } from './resources/uploads/initiate';
 import { uploadsCompleteDescription } from './resources/uploads/complete';
 import { uploadsUploadPartDescription } from './resources/uploads/uploadPart';
 import { assetsUpdate } from './resources/assets/update';
-
+import { assetsGet } from './resources/assets/get';
+import { boardsGet } from './resources/boards/get';
 
 /* eslint-disable  n8n-nodes-base/node-param-operation-option-action-miscased */
 /* eslint-disable  n8n-nodes-base/node-param-resource-with-plural-option */
@@ -22,7 +23,7 @@ export class Air implements INodeType {
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-        description: 'Get data from Airs API',
+        description: 'Access, update, and manage assets, boards, custom fields, and tags in your Air workspace',
         usableAsTool: true,
         defaults: {
             name: 'Air',
@@ -114,8 +115,8 @@ export class Air implements INodeType {
 					{
 						name: 'Get',
 						value: 'get',
-						action: 'Get Air assets',
-						description: 'Get Air Assets',
+						action: 'Get Air Assets',
+						description: 'Get Air assets',
 						routing: {
 							request: {
 								method: 'GET',
@@ -395,6 +396,8 @@ export class Air implements INodeType {
             ...uploadsUploadPartDescription,
             ...uploadsCompleteDescription,
             ...assetsUpdate,
+            ...assetsGet,
+            ...boardsGet,
 		]
 	};
 }
