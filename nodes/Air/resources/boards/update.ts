@@ -30,12 +30,12 @@ export const boardsUpdate: INodeProperties[] = [
 		type: 'string',
 		default: '',
 		displayOptions: { show: showOnlyForBoardsUpdate },
-		description: 'Plain value for text/date fields',
+		description: 'Plain value for text/date fields. Use this for text/date custom fields. Leave empty if using Value IDs.',
 		routing: {
 			send: {
 				type: 'body',
 				property: 'value',
-				value: '={{$value !== "" ? $value : undefined}}',
+				value: '={{(($parameter["valueIds"] || "").trim() !== "" ? undefined : ($value !== "" ? $value : undefined))}}',
 			},
 		},
 	},
@@ -45,12 +45,12 @@ export const boardsUpdate: INodeProperties[] = [
 		type: 'string',
 		default: '',
 		displayOptions: { show: showOnlyForBoardsUpdate },
-		description: 'IDs for select fields, e.g. id1,id2',
+		description: 'IDs for select/multi-select fields. Single: id1. Multiple: id1,id2. Leave empty if using plain Value.',
 		routing: {
 			send: {
 				type: 'body',
 				property: 'values',
-				value: '={{(() => { const arr = ($value || "").split(",").map(s => s.trim()).filter(Boolean).map(id => ({ id })); return arr.length ? arr : undefined; })()}}',
+				value: '={{(($parameter["value"] || "").trim() !== "" ? undefined : (() => { const raw = $parameter["valueIds"] || ""; const arr = String(raw).split(",").map(s => s.trim()).filter(Boolean).map(id => ({ id })); return arr.length ? arr : undefined; })())}}',
 			},
 		},
 	},
