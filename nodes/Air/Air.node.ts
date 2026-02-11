@@ -10,6 +10,7 @@ import { uploadsCompleteDescription } from './resources/uploads/complete';
 import { uploadsUploadPartDescription } from './resources/uploads/uploadPart';
 import { assetsUpdate } from './resources/assets/update';
 import { assetsGet } from './resources/assets/get';
+import { assetsBoardsDescription } from './resources/assets/boards';
 import { boardsGet } from './resources/boards/get';
 
 /* eslint-disable  n8n-nodes-base/node-param-operation-option-action-miscased */
@@ -121,6 +122,18 @@ export class Air implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/assets',
+							},
+						},
+					},
+					{
+						name: 'List Boards',
+						value: 'listBoards',
+						action: 'List Parent Boards',
+						description: 'Get the list of parent boards of an asset',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '={{`/assets/${String($parameter["assetId"] || "").trim()}/boards`}}',
 							},
 						},
 					},
@@ -397,6 +410,7 @@ export class Air implements INodeType {
             ...uploadsCompleteDescription,
             ...assetsUpdate,
             ...assetsGet,
+            ...assetsBoardsDescription,
             ...boardsGet,
 		]
 	};
