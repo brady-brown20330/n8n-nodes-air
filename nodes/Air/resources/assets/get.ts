@@ -96,4 +96,51 @@ export const assetsGet: INodeProperties[] = [
             },
         },
     },
+    {
+        displayName: 'Created At (From)',
+        name: 'createdAtGte',
+        type: 'string',
+        default: '',
+        placeholder: '2024-01-01T00:00:00.000Z',
+        displayOptions: { show: showOnlyForAssetsGet },
+        description: 'Filter assets created on or after this date (ISO 8601 format)',
+        routing: {
+            send: {
+                type: 'query',
+                property: 'createdAt[gte]',
+                value: '={{$value !== "" ? $value : undefined}}',
+            },
+        },
+    },
+    {
+        displayName: 'Created At (To)',
+        name: 'createdAtLte',
+        type: 'string',
+        default: '',
+        placeholder: '2024-12-31T23:59:59.999Z',
+        displayOptions: { show: showOnlyForAssetsGet },
+        description: 'Filter assets created on or before this date (ISO 8601 format)',
+        routing: {
+            send: {
+                type: 'query',
+                property: 'createdAt[lte]',
+                value: '={{$value !== "" ? $value : undefined}}',
+            },
+        },
+    },
+    {
+        displayName: 'Include Nested Assets',
+        name: 'includeNestedAssets',
+        type: 'boolean',
+        default: false,
+        displayOptions: { show: showOnlyForAssetsGet },
+        description: 'Whether to return assets from nested boards',
+        routing: {
+            send: {
+                type: 'query',
+                property: 'includeNestedAssets',
+                value: '={{$value ? "true" : undefined}}',
+            },
+        },
+    },
 ];

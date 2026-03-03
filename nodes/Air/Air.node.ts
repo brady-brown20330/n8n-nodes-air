@@ -1,6 +1,7 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { customFieldCreateDescription, customFieldUpdateDescription, customFieldValueCreateDescription, customFieldValueDeleteDescription } from './resources/customField';
 import { tagsCreateDescription } from './resources/tags/create';
+import { tagsGetDescription } from './resources/tags/get';
 import { boardsCreateDescription } from './resources/boards/create';
 import { boardsPatchDescription } from './resources/boards/patch';
 import { boardsAddAssetsDescription } from './resources/boards/assetsAdd';
@@ -10,6 +11,7 @@ import { uploadsCompleteDescription } from './resources/uploads/complete';
 import { uploadsUploadPartDescription } from './resources/uploads/uploadPart';
 import { assetsUpdate } from './resources/assets/update';
 import { assetsGet } from './resources/assets/get';
+import { assetsGetByIdDescription } from './resources/assets/getById';
 import { assetsBoardsDescription } from './resources/assets/boards';
 import { boardsGet } from './resources/boards/get';
 
@@ -122,6 +124,18 @@ export class Air implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/assets',
+							},
+						},
+					},
+					{
+						name: 'Get by ID',
+						value: 'getById',
+						action: 'Get Asset by ID',
+						description: 'Get a single asset by ID',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '={{`/assets/${String($parameter["assetId"] || "").trim()}`}}',
 							},
 						},
 					},
@@ -401,6 +415,7 @@ export class Air implements INodeType {
             ...customFieldValueCreateDescription,
             ...customFieldValueDeleteDescription,
             ...tagsCreateDescription,
+            ...tagsGetDescription,
             ...boardsCreateDescription,
             ...boardsPatchDescription,
             ...boardsAddAssetsDescription,
@@ -410,6 +425,7 @@ export class Air implements INodeType {
             ...uploadsCompleteDescription,
             ...assetsUpdate,
             ...assetsGet,
+            ...assetsGetByIdDescription,
             ...assetsBoardsDescription,
             ...boardsGet,
 		]
