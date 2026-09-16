@@ -14,6 +14,9 @@ import { assetsGet } from './resources/assets/get';
 import { assetsGetByIdDescription } from './resources/assets/getById';
 import { assetsBoardsDescription } from './resources/assets/boards';
 import { boardsGet } from './resources/boards/get';
+import { boardsRemoveAssetDescription } from './resources/boards/assetsRemove';
+import { importsCreateDescription } from './resources/imports/create';
+import { importsGetStatusDescription } from './resources/imports/getStatus';
 
 /* eslint-disable  n8n-nodes-base/node-param-operation-option-action-miscased */
 /* eslint-disable  n8n-nodes-base/node-param-resource-with-plural-option */
@@ -65,6 +68,10 @@ export class Air implements INodeType {
                     {
                         name: "Custom Fields",
                         value: 'customFields',
+                    },
+                    {
+                        name: 'Imports',
+                        value: 'imports',
                     },
                     {
                         name: "Tags",
@@ -280,6 +287,18 @@ export class Air implements INodeType {
                         },
                     },
                     {
+                        name: 'Remove Asset',
+                        value: 'removeAsset',
+                        action: 'Remove Asset from Board',
+                        description: 'Remove an asset from a board',
+                        routing: {
+                            request: {
+                                method: 'DELETE',
+                                url: '={{`/boards/${String($parameter["boardId"] || "").trim()}/assets/${String($parameter["assetId"] || "").trim()}`}}',
+                            },
+                        },
+                    },
+                    {
                         name: 'Update',
                         value: 'update',
                         action: 'Update Air Board',
@@ -293,6 +312,46 @@ export class Air implements INodeType {
                     },
                 ],
                 default: 'get',
+            },
+            {
+                displayName: 'Operation',
+                name: 'operation',
+                type: 'options',
+                noDataExpression: true,
+                displayOptions: {
+                    show: {
+                        resource: [
+                            'imports',
+                        ],
+                    },
+                },
+                options: [
+                    {
+                        name: 'Create',
+                        value: 'create',
+                        action: 'Create Import',
+                        description: 'Import a new asset (or asset version) from a publicly accessible URL',
+                        routing: {
+                            request: {
+                                method: 'POST',
+                                url: '/imports',
+                            },
+                        },
+                    },
+                    {
+                        name: 'Get Status',
+                        value: 'getStatus',
+                        action: 'Get Import Status',
+                        description: 'Check the status of an import',
+                        routing: {
+                            request: {
+                                method: 'GET',
+                                url: '={{`/imports/${String($parameter["importId"] || "").trim()}/status`}}',
+                            },
+                        },
+                    },
+                ],
+                default: 'create',
             },
             {
                 displayName: 'Operation',
@@ -428,6 +487,9 @@ export class Air implements INodeType {
             ...assetsGetByIdDescription,
             ...assetsBoardsDescription,
             ...boardsGet,
+            ...boardsRemoveAssetDescription,
+            ...importsCreateDescription,
+            ...importsGetStatusDescription,
 		]
 	};
 }
