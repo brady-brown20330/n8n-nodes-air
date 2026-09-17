@@ -37,3 +37,7 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # @n8n/node-cli's prepublishOnly hook blocks bare `npm publish` unless this
+          # is set, to force use of its local `npm run release` flow. This workflow
+          # is our sanctioned release process instead, so we assert that explicitly.
+          RELEASE_MODE: 'true'
